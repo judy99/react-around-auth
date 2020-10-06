@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form.js';
+import Header from './Header.js';
 
 function Register (props) {
   const [email, setEmail] = React.useState({});
@@ -26,6 +27,7 @@ function Register (props) {
     }
   return (
     <>
+    <Header isSignup='true' loggedIn={props.loggedIn} />
     <div className='main'>
     <div className='main__container'>
     <Form title='Sign Up' name='login' id='login' onSubmit={handleSubmit} value='Sign up' isOpen='true'>

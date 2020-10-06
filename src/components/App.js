@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import Main from './Main';
@@ -26,7 +27,7 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
 
-  const [loggedIn, setLoggedIn] = React.useState(false);
+
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -134,7 +135,9 @@ function App() {
     });
   }
 
-  // const loggedIn = false;
+// set up a placeholder state variable
+// later we'll make this value dynamic depending on the user's status
+  const [loggedIn, setLoggedIn] = React.useState(false);
   const auth = false;
 
       return (
@@ -143,19 +146,19 @@ function App() {
        isLoading ? <Loader /> : ''
      }
 
-     <Header loggedIn={loggedIn} auth={auth} />
-
       <Switch>
         <Route path="/signup">
-          <Register loggedIn={loggedIn} auth={auth}/>
+          <Register loggedIn={loggedIn} />
         </Route>
 
         <Route path="/signin">
-          <Login loggedIn={loggedIn} auth={auth} />
+          <Login loggedIn={loggedIn} />
         </Route>
 
         <Route exact path="/">
+        { loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
         <CurrentUserContext.Provider value={currentUser}>
+        <Header loggedIn={loggedIn} />
           <Main
           onEditProfile={handleEditProfileClick}
           onEditAvatar={handleEditAvatarClick}

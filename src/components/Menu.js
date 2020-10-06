@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 function Menu(props) {
-  if (props.loggedIn && props.auth) {
+  if (props.loggedIn) {
     return (
       <nav className="menu">
           <NavLink to="#" className="menu__link" activeClassName="menu__link_active" >my email here</NavLink>
@@ -10,19 +10,20 @@ function Menu(props) {
       </nav>
     );
   }
-  if (props.loggedIn || props.auth) {
+
+  if (props.isSignup) {
     return (
       <nav className="menu">
-        <NavLink to="/signup" className="menu__link" activeClassName="menu__link_active">Sign up</NavLink>
+        <NavLink to="/signin" className="menu__link">Log in</NavLink>
       </nav>
     )
-  } else {
-      return (
-        <nav className="menu">
-          <NavLink to="/signin" className="menu__link" activeClassName="menu__link_active">Log in</NavLink>
-        </nav>
-      )
-    }
+  } else  {
+    return (
+      <nav className="menu">
+        <NavLink to="/signup" className="menu__link">Sign up</NavLink>
+      </nav>
+    )
+  }
 }
 
 export default Menu;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form.js';
-
+import Header from './Header.js';
 
 function Login (props) {
 
@@ -28,6 +28,7 @@ function Login (props) {
 
   return (
     <>
+    <Header loggedIn={props.loggedIn} />
     <div className='main'>
     <div className='main__container'>
     <Form title='Log in' name='login' id='login' onSubmit={handleLogin} value='Log in' isOpen='true'>

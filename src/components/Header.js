@@ -6,7 +6,7 @@ function Header(props) {
     <header className="header">
       <a href="/" className="link header__logo logo">Around
       <span className="logo__small">The U.S.</span></a>
-      <Menu loggedIn={props.loggedIn} auth={props.auth} />
+      <Menu loggedIn={props.loggedIn} isSignup={props.isSignup} />
     </header>
   );
 }
