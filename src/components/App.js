@@ -12,9 +12,7 @@ import PopupWithImage from './PopupWithImage';
 import Loader from './Loader';
 import { Route, Switch } from 'react-router-dom';
 import Register from './Register';
-import Signin from './Signin';
-
-
+import Login from './Login';
 
 function App() {
   const [isEditProfilePopupOpen, setEditPopup] = React.useState(false);
@@ -151,7 +149,7 @@ function App() {
         </Route>
 
         <Route path="/signin">
-          <Signin loggedIn={loggedIn} auth={auth} />
+          <Login loggedIn={loggedIn} auth={auth} />
         </Route>
 
         <Route exact path="/">
@@ -181,8 +179,6 @@ function App() {
          </CurrentUserContext.Provider>
         </Route>
       </Switch>
-
-
 
       <Footer />
     </div>
