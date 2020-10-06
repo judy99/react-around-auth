@@ -26,6 +26,8 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
 
+  const [loggedIn, setLoggedIn] = React.useState(false);
+
   React.useEffect(() => {
     setIsLoading(true);
     api.getAppInfo().then((res) => {setIsLoading(false);})
@@ -132,7 +134,7 @@ function App() {
     });
   }
 
-  const loggedIn = false;
+  // const loggedIn = false;
   const auth = false;
 
       return (
