@@ -4,20 +4,27 @@ import Form from './Form.js';
 
 
 function Login (props) {
-  const [account, setAccount] = React.useState({email:'', password:''});
 
-  const handleOnChangeEmail = () => {};
-  const handleOnChangePassword = () => {};
+  const [email, setEmail] = React.useState({});
+  const [password, setPassword] = React.useState({});
 
-function handleLogin(e) {
-    e.preventDefault();
-    if (!account.email || !account.password) {
-      return;
+  const handleOnChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleOnChangePassword = (e) => {
+      setPassword(e.target.value);
+  };
+
+  function handleLogin(e) {
+      e.preventDefault();
+      if (!email || !password) {
+        return;
+      }
+      // we need to authorize our user here
+      // then we'll need to check the token
+      // finally, we'll redirect the user to the '/main' page
     }
-    // we need to authorize our user here
-    // then we'll need to check the token
-    // finally, we'll redirect the user to the '/ducks' page
-  }
 
   return (
     <>
