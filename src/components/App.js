@@ -135,7 +135,7 @@ function App() {
   }
 
   const loggedIn = false;
-  const auth = true;
+  const auth = false;
 
       return (
     <div className="page">
