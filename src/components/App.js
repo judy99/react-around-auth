@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import Header from './Header';
+import ProtectedRoute from './ProtectedRoute';
 import Footer from './Footer';
 import Main from './Main';
 import {api} from '../utils/api.js';
@@ -26,8 +26,7 @@ function App() {
   const [deleteCard, setDeleteCard] = React.useState(null);
   const [cards, setCards] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
-
-
+  const [isInfoToolTip, setInfoToolTip] = React.useState(false);
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -99,6 +98,7 @@ function App() {
     setAddPlace(false);
     setSelectedCard(null);
     setDeleteConfirmationPopup(false);
+    setInfoToolTip(false);
   }
 
   function handleCardClick(card) {
@@ -135,10 +135,13 @@ function App() {
     });
   }
 
+  function handleSignup() {
+    setInfoToolTip(true);
+  }
+
 // set up a placeholder state variable
 // later we'll make this value dynamic depending on the user's status
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const auth = false;
 
       return (
     <div className="page">
@@ -148,7 +151,7 @@ function App() {
 
       <Switch>
         <Route path="/signup">
-          <Register loggedIn={loggedIn} />
+          <Register loggedIn={loggedIn} onCloseToolTip={closeAllPopups} onSignup={handleSignup} isInfoToolTip={isInfoToolTip} />
         </Route>
 
         <Route path="/signin">
@@ -156,10 +159,9 @@ function App() {
         </Route>
 
         <Route exact path="/">
-        { loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
         <CurrentUserContext.Provider value={currentUser}>
-        <Header loggedIn={loggedIn} />
           <Main
+          loggedIn={loggedIn}
           onEditProfile={handleEditProfileClick}
           onEditAvatar={handleEditAvatarClick}
           onAddPlace={handleAddPlaceClick}
@@ -173,17 +175,19 @@ function App() {
           cards={cards}
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
+          // isInfoToolTip= {isInfoToolTip}
            />
+           <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+           <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace} />
+           <DeleteConfirmationPopup isOpen={isDeleteConfirmationPopup} onClose={closeAllPopups} onConfirmDelete={handleConfirmDelete} />
+           <PopupWithImage isOpen={isPopupWithImageOpen} card={selectedCard} onClose={closeAllPopups} />
 
-        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace} />
-        <DeleteConfirmationPopup isOpen={isDeleteConfirmationPopup} onClose={closeAllPopups} onConfirmDelete={handleConfirmDelete} />
-        <PopupWithImage isOpen={isPopupWithImageOpen} card={selectedCard} onClose={closeAllPopups} />
 
          </CurrentUserContext.Provider>
         </Route>
       </Switch>
+
 
       <Footer />
     </div>

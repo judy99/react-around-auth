@@ -1,12 +1,14 @@
 import React from 'react';
 import Card from './Card';
+import Header from './Header';
+
 import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 
 function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
-
   return (
     <>
+    <Header loggedIn={props.loggedIn} />
     <main className="main">
       <section className="profile">
         <div className="profile__person">
@@ -31,8 +33,6 @@ function Main(props) {
     }
       </ul>
     </main>
-
-      />
     </>
   );
 }
