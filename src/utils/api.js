@@ -8,6 +8,7 @@ export class Api {
   }
 
   // GET https://around.nomoreparties.co/v1/group-2/cards
+
   getInitialCards () {
     return fetch(this.baseUrl + '/cards', {
       headers: this.headers
