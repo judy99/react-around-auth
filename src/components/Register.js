@@ -35,7 +35,6 @@ function Register (props) {
       if (!email || !password) {
         setRegistered(false);
         setMessage('Something goes wrong...')
-        console.log(message);
         return;
       }
       else {
@@ -67,7 +66,7 @@ function Register (props) {
 
   return (
     <>
-    <Header isSignup='true' loggedIn={props.loggedIn} />
+    <Header loggedIn={props.loggedIn} />
     <div className='main'>
     <div className='main__container'>
     <Form title='Sign Up' name='login' id='login' onSubmit={handleSubmit} value='Sign up'>

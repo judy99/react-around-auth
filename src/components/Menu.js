@@ -1,29 +1,24 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
+import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 
 function Menu(props) {
-  if (props.loggedIn) {
+  // const currentUser = React.useContext(CurrentUserContext);
+  const history = useHistory();
+
+
+  console.log('inside menu = ', props.loggedIn);
+  console.log('inside menu email = ', props.email);
+
+
+  // if (props.loggedIn) {
     return (
       <nav className="menu">
-          <NavLink to="#" className="menu__link" activeClassName="menu__link_active" >my email here</NavLink>
-          <NavLink to="/signout" className="menu__link" activeClassName="menu__link_active">Log out</NavLink>
+          <NavLink to="#" className="menu__link" activeClassName="menu__link_active" >{props.email}</NavLink>
+          <NavLink to="/signin" className="menu__link" activeClassName="menu__link_active" onClick={signOut} >Log out</NavLink>
       </nav>
     );
-  }
-
-  if (props.isSignup) {
-    return (
-      <nav className="menu">
-        <NavLink to="/signin" className="menu__link">Log in</NavLink>
-      </nav>
-    )
-  } else  {
-    return (
-      <nav className="menu">
-        <NavLink to="/signup" className="menu__link">Sign up</NavLink>
-      </nav>
-    )
-  }
+  // }
 }
 
 export default Menu;

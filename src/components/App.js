@@ -1,5 +1,5 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Footer from './Footer';
 import Main from './Main';
@@ -14,6 +14,7 @@ import Loader from './Loader';
 import { Route, Switch } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
+import * as auth from '../utils/auth.js';
 
 function App() {
   const [isEditProfilePopupOpen, setEditPopup] = React.useState(false);
@@ -27,6 +28,10 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
   const [isInfoToolTip, setInfoToolTip] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [username, setUsername] = React.useState('');
+
+  const history = useHistory();
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -139,9 +144,37 @@ function App() {
     setInfoToolTip(true);
   }
 
-// set up a placeholder state variable
-// later we'll make this value dynamic depending on the user's status
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  function handleLogin() {
+    setLoggedIn(true);
+    console.log('loggedIn after Sign in ',loggedIn);
+  }
+
+  function signOut() {
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
+    setUsername('');
+    history.push('/signin');
+  }
+
+  React.useEffect( () => {
+  // if the user has a token in localStorage,
+  // this function will check that the user has a valid token
+  const jwt = localStorage.getItem('jwt');
+
+  if (jwt) {
+    // we'll verify the token
+    auth.getContent(jwt).then((res) => {
+      if (res) {
+        let userData = { email: res.data.email, password: res.data.password };
+        console.log(userData);
+        setLoggedIn(true);
+        setUsername(userData.email);
+        history.push("/");
+      }
+    });
+  }
+}, [loggedIn]);
+
 
       return (
     <div className="page">
@@ -155,7 +188,7 @@ function App() {
         </Route>
 
         <Route path="/signin">
-          <Login loggedIn={loggedIn} />
+          <Login handleLogin={handleLogin} loggedIn={loggedIn} />
         </Route>
 
         <Route exact path="/">
@@ -176,19 +209,17 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
           // isInfoToolTip= {isInfoToolTip}
+          username={username}
+          onSignOut={signOut}
            />
            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
            <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace} />
            <DeleteConfirmationPopup isOpen={isDeleteConfirmationPopup} onClose={closeAllPopups} onConfirmDelete={handleConfirmDelete} />
            <PopupWithImage isOpen={isPopupWithImageOpen} card={selectedCard} onClose={closeAllPopups} />
-
-
          </CurrentUserContext.Provider>
         </Route>
       </Switch>
-
-
       <Footer />
     </div>
   );

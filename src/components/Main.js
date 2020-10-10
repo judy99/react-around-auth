@@ -1,14 +1,17 @@
 import React from 'react';
 import Card from './Card';
 import Header from './Header';
-
+import { NavLink } from 'react-router-dom';
 import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 
 function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
   return (
     <>
-    <Header loggedIn={props.loggedIn} />
+    <Header>
+      <li><NavLink to="/" className="menu__link" activeClassName="menu__link_active" >{props.username}</NavLink></li>
+      <li><NavLink to="/signin" className="menu__link" onClick={props.onSignOut}>Log out</NavLink></li>
+    </Header>
     <main className="main">
       <section className="profile">
         <div className="profile__person">
