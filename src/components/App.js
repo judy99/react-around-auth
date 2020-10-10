@@ -146,7 +146,6 @@ function App() {
 
   function handleLogin() {
     setLoggedIn(true);
-    console.log('loggedIn after Sign in ',loggedIn);
   }
 
   function signOut() {
@@ -166,7 +165,6 @@ function App() {
     auth.getContent(jwt).then((res) => {
       if (res) {
         let userData = { email: res.data.email, password: res.data.password };
-        console.log(userData);
         setLoggedIn(true);
         setUsername(userData.email);
         history.push("/");
@@ -184,7 +182,8 @@ function App() {
 
       <Switch>
         <Route path="/signup">
-          <Register loggedIn={loggedIn} onCloseToolTip={closeAllPopups} onSignup={handleSignup} isInfoToolTip={isInfoToolTip} />
+          <Register onSignup={handleSignup} onCloseToolTip={closeAllPopups} isInfoToolTip={isInfoToolTip} />
+
         </Route>
 
         <Route path="/signin">

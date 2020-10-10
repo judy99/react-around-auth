@@ -1,7 +1,9 @@
+import { httpStatusCode } from '../utils/utils.js';
+
 const BASE_URL = 'https://register.nomoreparties.co';
 
+
 export const register = (email, password) => {
-  console.log(email, password);
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
@@ -11,7 +13,7 @@ export const register = (email, password) => {
   })
   .then((response) => {
     try {
-      if (response.status === 201){
+      if (response.status === httpStatusCode.CREATED){
         return response.json();
       }
     } catch(e){
@@ -34,7 +36,6 @@ export const authorize = (email, password) => {
   })
   .then((response) => response.json())
   .then((data) => {
-    console.log('auth: ', data);
     if (data.token) {
       localStorage.setItem('jwt', data.token);
       return data;

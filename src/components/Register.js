@@ -1,18 +1,20 @@
-import React, { Button, useState, useEffect } from 'react';
-import { Link, useHistory, withRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import Form from './Form.js';
 import Header from './Header.js';
 import InfoToolTip from './InfoToolTip.js';
 import * as auth from '../utils/auth.js';
+import { httpStatusCode } from '../utils/utils.js';
+
 
 function Register (props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [isRegistered, setRegistered] = useState(false);
+  const DELAY_REDIRECT = 3000;
 
   const history = useHistory();
-
 
   const handleOnChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -30,43 +32,44 @@ function Register (props) {
 
   const handleSubmit = (e) => {
       e.preventDefault();
-      props.onSignup();
 
       if (!email || !password) {
         setRegistered(false);
-        setMessage('Something goes wrong...')
+        setMessage('Something goes wrong...');
+        props.onSignup();
         return;
       }
       else {
-        setRegistered(true);
         auth.register(email, password)
         .then((res) => {
-          if (!res || res.statusCode === 400) {
-            throw new Error('Error 400 !!!');
+          if (!res || res.statusCode === httpStatusCode.BAD_REQUEST) {
+            setRegistered(false);
+            props.onSignup();
+            throw new Error('One of the fields was filled in incorrectly');
           }
-          console.log('after auth', res);
+          setRegistered(true);
           return res;
         })
+        .then(props.onSignup)
         .then(resetForm)
-        .then(() => history.push('/signin'))
+        .then(() => {
+          setTimeout(() => history.push('/signin'), DELAY_REDIRECT)
+        })
         .catch((err) => setMessage(err.message));
       }
-
-      // props.onSignup();
-      // we need to register our user here
-      // show message about succsess registration
-      // finally, we'll redirect the user to the '/main' page
     };
 
-    useEffect( () => {
-      if (localStorage.getItem('jwt')) {
-        history.push('/');
-      }
-    }, []);
+    // useEffect( () => {
+    //   if (localStorage.getItem('jwt')) {
+    //     history.push('/');
+    //   }
+    // }, []);
 
   return (
     <>
-    <Header loggedIn={props.loggedIn} />
+    <Header>
+      <li><NavLink to="/signup" className="menu__link">Log In</NavLink></li>
+    </Header>
     <div className='main'>
     <div className='main__container'>
     <Form title='Sign Up' name='login' id='login' onSubmit={handleSubmit} value='Sign up'>
@@ -80,7 +83,7 @@ function Register (props) {
     </div>
     { isRegistered ?
       <InfoToolTip name='tool-tip' isRegistered={isRegistered} isOpen={props.isInfoToolTip} title='Success! You have now been registered.' onClose={props.onCloseToolTip} />
-      : <InfoToolTip isRegistered={isRegistered} isOpen={props.isInfoToolTip} title='Oops, something went wrong! Please try again.' name='tool-tip' onClose={props.onCloseToolTip} />}
+      : <InfoToolTip isOpen={props.isInfoToolTip} isRegistered={isRegistered} title='Oops, something went wrong! Please try again.' name='tool-tip' onClose={props.onCloseToolTip} />}
     </>
 
   );

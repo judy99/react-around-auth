@@ -36,7 +36,6 @@ function Login (props) {
       else {
         auth.authorize(email, password)
         .then((data) => {
-          console.log('after hit Login: ', data);
           if (!data) {
             throw new Error('Authorization error.');
           }
