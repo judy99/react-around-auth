@@ -34,7 +34,22 @@ export const authorize = (email, password) => {
     },
     body: JSON.stringify({ email, password })
   })
-  .then((response) => response.json())
+  .then((response) => {
+    try {
+      if (response.status === httpStatusCode.BAD_REQUEST) {
+        throw new Error('One or more of the fields were not provided.');
+      }
+      else if (response.status === httpStatusCode.UNAUTHORIZED) {
+        throw new Error('The user with the specified email not found.');
+      }
+      else {
+        return response.json();
+      }
+    } catch(e) {
+      console.log(e);
+      return e;
+    }
+  })
   .then((data) => {
     if (data.token) {
       localStorage.setItem('jwt', data.token);

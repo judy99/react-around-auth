@@ -68,7 +68,7 @@ function Register (props) {
   return (
     <>
     <Header>
-      <li><NavLink to="/signup" className="menu__link">Log In</NavLink></li>
+      <li><NavLink to="/signin" className="menu__link">Log In</NavLink></li>
     </Header>
     <div className='main'>
     <div className='main__container'>

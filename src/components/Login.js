@@ -26,18 +26,12 @@ function Login (props) {
     setMessage('');
   };
 
-
   const handleSubmit = (e) => {
       e.preventDefault();
-
-      if (!email || !password) {
-        return;
-      }
-      else {
         auth.authorize(email, password)
         .then((data) => {
           if (!data) {
-            throw new Error('Authorization error.');
+            throw new Error('Error while authorization.');
           }
           if (data.token) {
             props.handleLogin();
@@ -45,8 +39,7 @@ function Login (props) {
         })
         .then(resetForm)
         .then(() => history.push('/'))
-        .catch((err) => setMessage(err.message));
-      }
+        .catch((err) => console.log(err));
     };
 
     useEffect(() => {
