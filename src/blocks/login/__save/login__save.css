@@ -1,10 +1,11 @@
-.login__save.form__submit {
+.login__save {
   background: #fff;
   color: #000000;
   border: none;
+  margin-top: 200px;
 }
 
-.login__save.form__submit:hover {
+.login__save:hover {
   background: #FFFFFF;
   opacity: 0.85;
 }
