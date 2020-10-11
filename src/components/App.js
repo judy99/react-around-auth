@@ -60,7 +60,6 @@ function App() {
     api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
       // Create a new array based on the existing one and putting a new card into it
       const newCards = cards.map((c) => c._id === card._id ? newCard : c);
-      // Update the state
       setCards(newCards);
     });
 }
@@ -161,15 +160,19 @@ function App() {
   const jwt = localStorage.getItem('jwt');
 
   if (jwt) {
-    // we'll verify the token
-    auth.getContent(jwt).then((res) => {
+    auth.getContent(jwt)
+    .then((res) => {
       if (res) {
         let userData = { email: res.data.email, password: res.data.password };
         setLoggedIn(true);
         setUsername(userData.email);
         history.push("/");
       }
-    });
+      else {
+        throw new Error('The provided token is invalid.');
+      }
+    })
+    .catch((err) => console.log(err));
   }
 }, [loggedIn]);
 
@@ -207,7 +210,6 @@ function App() {
           cards={cards}
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
-          // isInfoToolTip= {isInfoToolTip}
           username={username}
           onSignOut={signOut}
            />

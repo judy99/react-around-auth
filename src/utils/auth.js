@@ -71,6 +71,12 @@ export const getContent = (token) => {
         'Authorization': `Bearer ${token}`,
       }
     })
-    .then(res => res.json())
+    .then(res => {
+      if (res.status === httpStatusCode.UNAUTHORIZED) {
+        throw new Error('Token is not provided or provided in the wrong format.');
+      }
+      return res.json();
+    })
     .then(data => data)
+    .catch(err => console.log(err));
 }
