@@ -1,15 +1,9 @@
-import React, {useEffect} from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Footer from './Footer';
 import Main from './Main';
 import {api} from '../utils/api.js';
-import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
-import EditProfilePopup from './EditProfilePopup';
-import EditAvatarPopup from './EditAvatarPopup';
-import AddPlacePopup from './AddPlacePopup';
-import DeleteConfirmationPopup from './DeleteConfirmationPopup';
-import PopupWithImage from './PopupWithImage';
 import Loader from './Loader';
 import { Route, Switch } from 'react-router-dom';
 import Register from './Register';
@@ -164,8 +158,8 @@ function App() {
     .then((res) => {
       if (res) {
         let userData = { email: res.data.email, password: res.data.password };
-        setLoggedIn(true);
         setUsername(userData.email);
+        setLoggedIn(true);
         history.push("/");
       }
       else {
@@ -174,8 +168,7 @@ function App() {
     })
     .catch((err) => console.log(err));
   }
-}, [loggedIn]);
-
+}, []);
 
       return (
     <div className="page">
@@ -193,18 +186,12 @@ function App() {
           <Login handleLogin={handleLogin} loggedIn={loggedIn} />
         </Route>
 
-        <Route exact path="/">
-        <CurrentUserContext.Provider value={currentUser}>
-          <Main
-          loggedIn={loggedIn}
+        <ProtectedRoute path="/" loggedIn={loggedIn}
+          component={Main}
           onEditProfile={handleEditProfileClick}
           onEditAvatar={handleEditAvatarClick}
           onAddPlace={handleAddPlaceClick}
-          isEditProfilePopupOpen={isEditProfilePopupOpen}
-          isAddPlacePopupOpen={isAddPlacePopupOpen}
-          isEditAvatarPopupOpen={isEditAvatarPopupOpen}
-          isDeleteConfirmationPopup={isDeleteConfirmationPopup}
-          isPopupWithImageOpen={isPopupWithImageOpen}
+
           selectedCard={selectedCard}
           onSelectedCard={handleCardClick}
           cards={cards}
@@ -212,14 +199,21 @@ function App() {
           onCardDelete={handleCardDelete}
           username={username}
           onSignOut={signOut}
-           />
-           <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-           <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace} />
-           <DeleteConfirmationPopup isOpen={isDeleteConfirmationPopup} onClose={closeAllPopups} onConfirmDelete={handleConfirmDelete} />
-           <PopupWithImage isOpen={isPopupWithImageOpen} card={selectedCard} onClose={closeAllPopups} />
-         </CurrentUserContext.Provider>
-        </Route>
+          currentUser={currentUser}
+
+          closeAllPopups={closeAllPopups}
+
+          isEditProfilePopupOpen={isEditProfilePopupOpen}
+          isAddPlacePopupOpen={isAddPlacePopupOpen}
+          isEditAvatarPopupOpen={isEditAvatarPopupOpen}
+          isDeleteConfirmationPopup={isDeleteConfirmationPopup}
+          isPopupWithImageOpen={isPopupWithImageOpen}
+
+          handleUpdateUser={handleUpdateUser}
+          handleUpdateAvatar={handleUpdateAvatar}
+          handleAddPlace={handleAddPlace}
+          handleConfirmDelete={handleConfirmDelete}
+       />
       </Switch>
       <Footer />
     </div>

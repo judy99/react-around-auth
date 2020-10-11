@@ -47,8 +47,7 @@ function Login (props) {
         history.push('/');
       }
     }, []);
-
-
+    
   return (
     <>
     <Header>

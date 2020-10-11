@@ -59,11 +59,11 @@ function Register (props) {
       }
     };
 
-    // useEffect( () => {
-    //   if (localStorage.getItem('jwt')) {
-    //     history.push('/');
-    //   }
-    // }, []);
+    useEffect( () => {
+      if (localStorage.getItem('jwt')) {
+        history.push('/');
+      }
+    }, []);
 
   return (
     <>
