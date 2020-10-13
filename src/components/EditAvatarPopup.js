@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup(props) {
@@ -9,8 +9,12 @@ function EditAvatarPopup(props) {
     props.onUpdateAvatar({
       avatar: avatarRef.current.value,
     });
-    avatarRef.current.value = '';
   }
+
+  useEffect(() => {
+    avatarRef.current.value = '';
+  }, [props.isOpen]);
+
   return (
       <PopupWithForm title='Change profile picture' name='change-avatar' isOpen={props.isOpen} onClose={props.onClose} onSubmit={handleSubmit} value='Save' >
         <input type="url" name="avatar-link" id="avatar-input" ref={avatarRef} className="form__input change-avatar__link" placeholder="Image URL" required />

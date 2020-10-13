@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function AddPlacePopup(props) {
@@ -20,9 +20,13 @@ function AddPlacePopup(props) {
       name: name,
       link: link,
     });
+  }
+
+  useEffect(() => {
     setName('');
     setLink('');
-  }
+  }, [props.isOpen]);
+
 
   return (
     <PopupWithForm title='New place' name='add-card' isOpen={props.isOpen} onClose={props.onClose} onSubmit={handleSubmit} value='Add place'>
