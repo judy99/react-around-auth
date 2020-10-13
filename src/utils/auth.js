@@ -23,7 +23,7 @@ export const register = (email, password) => {
   .then((res) => {
     return res;
   })
-  .catch((err) => console.log(err));
+  .catch((err) => err);
 };
 
 export const authorize = (email, password) => {
@@ -36,30 +36,36 @@ export const authorize = (email, password) => {
   })
   .then((response) => {
     try {
-      if (response.status === httpStatusCode.BAD_REQUEST) {
-        throw new Error('One or more of the fields were not provided.');
-      }
-      else if (response.status === httpStatusCode.UNAUTHORIZED) {
-        throw new Error('The user with the specified email not found.');
-      }
-      else {
+      const err = new Error();
+      if (response.status === httpStatusCode.OK) {
         return response.json();
       }
+        else if (response.status === httpStatusCode.BAD_REQUEST) {
+          err.message = '400';
+          return err;
+        }
+        else if (response.status === httpStatusCode.UNAUTHORIZED) {
+          err.message = '401';
+          return err;
+        }
+        else {
+          return err;
+        }
     } catch(e) {
       console.log(e);
       return e;
     }
   })
-  .then((data) => {
-    if (data.token) {
-      localStorage.setItem('jwt', data.token);
-      return data;
-    }
-    else {
-      return;
-    }
-  })
-  .catch((err) => console.log(err));
+  // .then((data) => {
+  //   if (data.token) {
+  //     localStorage.setItem('jwt', data.token);
+  //     return data;
+  //   }
+  //   else {
+  //     return;
+  //   }
+  // })
+  // .catch((err) => err);
 };
 
 export const getContent = (token) => {
@@ -78,5 +84,5 @@ export const getContent = (token) => {
       return res.json();
     })
     .then(data => data)
-    .catch(err => console.log(err));
+    .catch(err => err);
 }

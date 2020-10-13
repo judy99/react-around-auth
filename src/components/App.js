@@ -137,8 +137,32 @@ function App() {
     setInfoToolTip(true);
   }
 
-  function handleLogin() {
-    setLoggedIn(true);
+  function handleLogin(username, password) {
+    // setLoggedIn(true);
+
+    auth.authorize(username, password)
+    .then((data) => {
+      try {
+        if (data instanceof Error) {
+          if (data.message === '400')
+            throw new Error('One or more of the fields were not provided.');
+          if (data.message === '401')
+            throw new Error('The user with the specified email not found.');
+        }
+        else if (data.token) {
+          console.log('data.token', data.token);
+          setLoggedIn(true);
+          return;
+        }
+      }
+      catch(e) {
+        console.log('catch in app: ', e);
+        return e;
+      }
+    })
+    // .then(resetForm)
+    .then(() => history.push('/'))
+    .catch((err) => console.log(err));
   }
 
   function signOut() {

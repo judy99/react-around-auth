@@ -28,18 +28,19 @@ function Login (props) {
 
   const handleSubmit = (e) => {
       e.preventDefault();
-        auth.authorize(email, password)
-        .then((data) => {
-          if (!data) {
-            throw new Error('Error while authorization.');
-          }
-          if (data.token) {
-            props.handleLogin();
-          }
-        })
-        .then(resetForm)
-        .then(() => history.push('/'))
-        .catch((err) => console.log(err));
+      props.handleLogin(email, password);
+        // auth.authorize(email, password)
+        // .then((data) => {
+        //   if (!data) {
+        //     throw new Error('Error while authorization.');
+        //   }
+        //   if (data.token) {
+        //     props.handleLogin();
+        //   }
+        // })
+        // .then(resetForm)
+        // .then(() => history.push('/'))
+        // .catch((err) => console.log(err));
     };
 
     useEffect(() => {
@@ -47,7 +48,7 @@ function Login (props) {
         history.push('/');
       }
     }, []);
-    
+
   return (
     <>
     <Header>
