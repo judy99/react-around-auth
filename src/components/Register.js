@@ -3,16 +3,10 @@ import { Link, NavLink, useHistory } from 'react-router-dom';
 import Form from './Form.js';
 import Header from './Header.js';
 import InfoToolTip from './InfoToolTip.js';
-import * as auth from '../utils/auth.js';
-import { httpStatusCode } from '../utils/utils.js';
-
 
 function Register (props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [isRegistered, setRegistered] = useState(false);
-  const DELAY_REDIRECT = 3000;
 
   const history = useHistory();
 
@@ -27,37 +21,12 @@ function Register (props) {
   const resetForm = () => {
     setEmail('');
     setPassword('');
-    setMessage('');
   };
 
   const handleSubmit = (e) => {
       e.preventDefault();
       props.handleSignup(email, password);
-
-      // if (!email || !password) {
-      //   setRegistered(false);
-      //   setMessage('Something goes wrong...');
-      //   props.onSignup();
-      //   return;
-      // }
-      // else {
-      //   auth.register(email, password)
-      //   .then((res) => {
-      //     if (!res || res.statusCode === httpStatusCode.BAD_REQUEST) {
-      //       setRegistered(false);
-      //       props.onSignup();
-      //       throw new Error('One of the fields was filled in incorrectly');
-      //     }
-      //     setRegistered(true);
-      //     return res;
-      //   })
-      //   .then(props.onSignup)
-      //   .then(resetForm)
-      //   .then(() => {
-      //     setTimeout(() => history.push('/signin'), DELAY_REDIRECT)
-      //   })
-      //   .catch((err) => setMessage(err.message));
-      // }
+      resetForm();
     };
 
     useEffect( () => {
@@ -82,9 +51,12 @@ function Register (props) {
     <Link className='login__link' to="/signin">Already a member? Log in here</Link>
     </div>
     </div>
-    { isRegistered ?
-      <InfoToolTip name='tool-tip' isRegistered={isRegistered} isOpen={props.isInfoToolTip} title='Success! You have now been registered.' onClose={props.onCloseToolTip} />
-      : <InfoToolTip isOpen={props.isInfoToolTip} isRegistered={isRegistered} title='Oops, something went wrong! Please try again.' name='tool-tip' onClose={props.onCloseToolTip} />}
+
+    { props.isRegistered ?
+      <InfoToolTip name='tool-tip' isRegistered={props.isRegistered} isOpen={props.isInfoToolTip} title='Success! You have now been registered.' onClose={props.onCloseToolTip} />
+      : <InfoToolTip isOpen={props.isInfoToolTip} isRegistered={props.isRegistered} title='Oops, something went wrong! Please try again.' name='tool-tip' onClose={props.onCloseToolTip} />
+    }
+
     </>
 
   );

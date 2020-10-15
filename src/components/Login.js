@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import Form from './Form.js';
 import Header from './Header.js';
-import * as auth from '../utils/auth.js';
 
 function Login (props) {
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [message, setMessage] = useState('');
 
   const history = useHistory();
 
@@ -23,24 +21,12 @@ function Login (props) {
   const resetForm = () => {
     setEmail('');
     setPassword('');
-    setMessage('');
   };
 
   const handleSubmit = (e) => {
       e.preventDefault();
       props.handleLogin(email, password);
-        // auth.authorize(email, password)
-        // .then((data) => {
-        //   if (!data) {
-        //     throw new Error('Error while authorization.');
-        //   }
-        //   if (data.token) {
-        //     props.handleLogin();
-        //   }
-        // })
-        // .then(resetForm)
-        // .then(() => history.push('/'))
-        // .catch((err) => console.log(err));
+      resetForm();
     };
 
     useEffect(() => {

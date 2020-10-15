@@ -10,9 +10,11 @@ import Register from './Register';
 import Login from './Login';
 import * as auth from '../utils/auth.js';
 import { httpStatusCode } from '../utils/utils.js';
-
+import InfoToolTip from './InfoToolTip.js';
 
 function App() {
+  const DELAY_REDIRECT = 3000;
+
   const [isEditProfilePopupOpen, setEditPopup] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlace] = React.useState(false);
   const [isEditAvatarPopupOpen, setEditAvatar] = React.useState(false);
@@ -141,28 +143,35 @@ function App() {
       .then((res) => {
       try {
         if (res instanceof Error) {
-          if (res.message === '400') {
+          if (res.message === String(httpStatusCode.BAD_REQUEST)) {
+            setRegistered(false);
+            setInfoToolTip(true);
             throw new Error('One of the fields was filled in incorrectly');
           }
         }
         else {
           setRegistered(true);
+          setInfoToolTip(true);
           // console.log('success registration - ', res);
           return res;
         }
       }
       catch(e) {
         setRegistered(false);
+        setInfoToolTip(true);
         console.log(e.message);
         return e;
       }
     })
       .then((res) => {
         if (!(res instanceof Error)) {
-          setTimeout(() => history.push('/signin'), 2000);
+          setRegistered(true);
+          setInfoToolTip(true);
+          setTimeout(() => history.push('/signin'), DELAY_REDIRECT);
         }
       })
-      .catch((err) => err);
+      .catch((err) => err)
+      .finally(() => setInfoToolTip(false));
   }
 
   function handleLogin(username, password) {
@@ -170,9 +179,9 @@ function App() {
     .then((data) => {
       try {
         if (data instanceof Error) {
-          if (data.message === '400')
+          if (data.message === String(httpStatusCode.BAD_REQUEST))
             throw new Error('One or more of the fields were not provided.');
-          if (data.message === '401')
+          if (data.message === String(httpStatusCode.UNAUTHORIZED))
             throw new Error('The user with the specified email not found.');
         }
         else if (data.token) {
@@ -186,7 +195,6 @@ function App() {
         return e;
       }
     })
-    // .then(resetForm)
     .then(() => history.push('/'))
     .catch((err) => console.log(err));
   }
@@ -228,8 +236,7 @@ function App() {
 
       <Switch>
         <Route path="/signup">
-          <Register handleSignup={handleSignup} onCloseToolTip={closeAllPopups} isInfoToolTip={isInfoToolTip} />
-
+          <Register handleSignup={handleSignup} onCloseToolTip={closeAllPopups} isInfoToolTip={isInfoToolTip} isRegistered={isRegistered} />
         </Route>
 
         <Route path="/signin">
