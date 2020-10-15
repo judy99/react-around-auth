@@ -9,6 +9,8 @@ import { Route, Switch } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import * as auth from '../utils/auth.js';
+import { httpStatusCode } from '../utils/utils.js';
+
 
 function App() {
   const [isEditProfilePopupOpen, setEditPopup] = React.useState(false);
@@ -24,6 +26,7 @@ function App() {
   const [isInfoToolTip, setInfoToolTip] = React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [username, setUsername] = React.useState('');
+  const [isRegistered, setRegistered] = React.useState(false);
 
   const history = useHistory();
 
@@ -133,13 +136,36 @@ function App() {
     });
   }
 
-  function handleSignup() {
-    setInfoToolTip(true);
+  function handleSignup(username, password) {
+      auth.register(username, password)
+      .then((res) => {
+      try {
+        if (res instanceof Error) {
+          if (res.message === '400') {
+            throw new Error('One of the fields was filled in incorrectly');
+          }
+        }
+        else {
+          setRegistered(true);
+          // console.log('success registration - ', res);
+          return res;
+        }
+      }
+      catch(e) {
+        setRegistered(false);
+        console.log(e.message);
+        return e;
+      }
+    })
+      .then((res) => {
+        if (!(res instanceof Error)) {
+          setTimeout(() => history.push('/signin'), 2000);
+        }
+      })
+      .catch((err) => err);
   }
 
   function handleLogin(username, password) {
-    // setLoggedIn(true);
-
     auth.authorize(username, password)
     .then((data) => {
       try {
@@ -202,7 +228,7 @@ function App() {
 
       <Switch>
         <Route path="/signup">
-          <Register onSignup={handleSignup} onCloseToolTip={closeAllPopups} isInfoToolTip={isInfoToolTip} />
+          <Register handleSignup={handleSignup} onCloseToolTip={closeAllPopups} isInfoToolTip={isInfoToolTip} />
 
         </Route>
 

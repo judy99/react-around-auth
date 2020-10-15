@@ -13,11 +13,16 @@ export const register = (email, password) => {
   })
   .then((response) => {
     try {
-      if (response.status === httpStatusCode.CREATED){
+      if (response.status === httpStatusCode.CREATED) {
         return response.json();
       }
+      else {
+        const err = new Error();
+        err.message = '400';
+        return err;
+      }
     } catch(e){
-        return (e)
+        return (e);
     }
   })
   .then((res) => {

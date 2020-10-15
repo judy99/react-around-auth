@@ -32,31 +32,32 @@ function Register (props) {
 
   const handleSubmit = (e) => {
       e.preventDefault();
+      props.handleSignup(email, password);
 
-      if (!email || !password) {
-        setRegistered(false);
-        setMessage('Something goes wrong...');
-        props.onSignup();
-        return;
-      }
-      else {
-        auth.register(email, password)
-        .then((res) => {
-          if (!res || res.statusCode === httpStatusCode.BAD_REQUEST) {
-            setRegistered(false);
-            props.onSignup();
-            throw new Error('One of the fields was filled in incorrectly');
-          }
-          setRegistered(true);
-          return res;
-        })
-        .then(props.onSignup)
-        .then(resetForm)
-        .then(() => {
-          setTimeout(() => history.push('/signin'), DELAY_REDIRECT)
-        })
-        .catch((err) => setMessage(err.message));
-      }
+      // if (!email || !password) {
+      //   setRegistered(false);
+      //   setMessage('Something goes wrong...');
+      //   props.onSignup();
+      //   return;
+      // }
+      // else {
+      //   auth.register(email, password)
+      //   .then((res) => {
+      //     if (!res || res.statusCode === httpStatusCode.BAD_REQUEST) {
+      //       setRegistered(false);
+      //       props.onSignup();
+      //       throw new Error('One of the fields was filled in incorrectly');
+      //     }
+      //     setRegistered(true);
+      //     return res;
+      //   })
+      //   .then(props.onSignup)
+      //   .then(resetForm)
+      //   .then(() => {
+      //     setTimeout(() => history.push('/signin'), DELAY_REDIRECT)
+      //   })
+      //   .catch((err) => setMessage(err.message));
+      // }
     };
 
     useEffect( () => {
