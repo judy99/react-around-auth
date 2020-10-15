@@ -25,10 +25,10 @@ function App() {
   const [deleteCard, setDeleteCard] = React.useState(null);
   const [cards, setCards] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
-  const [isInfoToolTip, setInfoToolTip] = React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [username, setUsername] = React.useState('');
   const [isRegistered, setRegistered] = React.useState(false);
+  const [isInfoToolTip, setInfoToolTip] = React.useState(false);
 
   const history = useHistory();
 
@@ -145,33 +145,31 @@ function App() {
         if (res instanceof Error) {
           if (res.message === String(httpStatusCode.BAD_REQUEST)) {
             setRegistered(false);
-            setInfoToolTip(true);
             throw new Error('One of the fields was filled in incorrectly');
           }
         }
         else {
           setRegistered(true);
-          setInfoToolTip(true);
-          // console.log('success registration - ', res);
           return res;
         }
       }
       catch(e) {
-        setRegistered(false);
-        setInfoToolTip(true);
         console.log(e.message);
         return e;
       }
     })
       .then((res) => {
         if (!(res instanceof Error)) {
-          setRegistered(true);
-          setInfoToolTip(true);
-          setTimeout(() => history.push('/signin'), DELAY_REDIRECT);
+          setTimeout(() => {
+            closeAllPopups();
+            history.push('/signin');
+          }, DELAY_REDIRECT);
         }
       })
       .catch((err) => err)
-      .finally(() => setInfoToolTip(false));
+      .finally(() => {
+        setInfoToolTip(true);
+      });
   }
 
   function handleLogin(username, password) {
@@ -205,6 +203,10 @@ function App() {
     setUsername('');
     history.push('/signin');
   }
+
+  React.useEffect( () => {
+    setInfoToolTip(false);
+  }, []);
 
   React.useEffect( () => {
   // if the user has a token in localStorage,

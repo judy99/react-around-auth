@@ -7,6 +7,8 @@ import InfoToolTip from './InfoToolTip.js';
 function Register (props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isRegistered, setRegistered] = useState(false);
+  const [isInfoToolTip, setInfoToolTip] = useState(false);
 
   const history = useHistory();
 
@@ -28,6 +30,21 @@ function Register (props) {
       props.handleSignup(email, password);
       resetForm();
     };
+
+    useEffect( () => {
+        setRegistered(props.isRegistered);
+        setInfoToolTip(props.isInfoToolTip);
+    }, [props.isRegistered, props.isInfoToolTip]);
+
+
+    // useEffect( () => {
+    //   if (isRegistered && isInfoToolTip) {
+    //     setInfoToolTip(false);
+    //     setRegistered(false);
+    //   }
+    // }, []);
+
+
 
     useEffect( () => {
       if (localStorage.getItem('jwt')) {
@@ -52,9 +69,9 @@ function Register (props) {
     </div>
     </div>
 
-    { props.isRegistered ?
-      <InfoToolTip name='tool-tip' isRegistered={props.isRegistered} isOpen={props.isInfoToolTip} title='Success! You have now been registered.' onClose={props.onCloseToolTip} />
-      : <InfoToolTip isOpen={props.isInfoToolTip} isRegistered={props.isRegistered} title='Oops, something went wrong! Please try again.' name='tool-tip' onClose={props.onCloseToolTip} />
+    { isRegistered ?
+      <InfoToolTip name='tool-tip' isRegistered={isRegistered} isOpen={isInfoToolTip} title='Success! You have now been registered.' onClose={props.onCloseToolTip} />
+      : <InfoToolTip isOpen={isInfoToolTip} isRegistered={isRegistered} title='Oops, something went wrong! Please try again.' name='tool-tip' onClose={props.onCloseToolTip} />
     }
 
     </>
