@@ -33,23 +33,16 @@ function App() {
 
   React.useEffect(() => {
     setIsLoading(true);
-    api.getAppInfo().then((res) => {setIsLoading(false);})
+    api.getAppInfo().then((res) => {
+      setCurrentUser(res[1]);
+      setCards(res[0]);
+      setIsLoading(false);
+    })
     .catch((err) => console.log(err))
     .finally(() => {
       setIsLoading(false);
     });
   }, []);
-
-  React.useEffect(() => {
-    api.getUserInfo().then(res => {
-      setCurrentUser(res);
-    })
-    .catch((err) => console.log(err));
-  });
-
-  React.useEffect(() => {
-    api.getInitialCards().then(res => { setCards(res)}).catch((err) => console.log(err));
-  }, [cards]);
 
   function handleCardLike(card) {
     // Check one more time if this card was already liked
