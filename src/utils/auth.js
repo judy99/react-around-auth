@@ -2,7 +2,6 @@ import { httpStatusCode } from '../utils/utils.js';
 
 const BASE_URL = 'https://register.nomoreparties.co';
 
-
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
@@ -18,7 +17,7 @@ export const register = (email, password) => {
       }
       else {
         const err = new Error();
-        err.message = '400';
+        err.message = String(httpStatusCode.BAD_REQUEST);
         return err;
       }
     } catch(e){
@@ -28,7 +27,7 @@ export const register = (email, password) => {
   .then((res) => {
     return res;
   })
-  .catch((err) => err);
+  // .catch((err) => err);
 };
 
 export const authorize = (email, password) => {
@@ -46,11 +45,11 @@ export const authorize = (email, password) => {
         return response.json();
       }
         else if (response.status === httpStatusCode.BAD_REQUEST) {
-          err.message = '400';
+          err.message = String(httpStatusCode.BAD_REQUEST);
           return err;
         }
         else if (response.status === httpStatusCode.UNAUTHORIZED) {
-          err.message = '401';
+          err.message = String(httpStatusCode.UNAUTHORIZED);
           return err;
         }
         else {
@@ -61,16 +60,6 @@ export const authorize = (email, password) => {
       return e;
     }
   })
-  // .then((data) => {
-  //   if (data.token) {
-  //     localStorage.setItem('jwt', data.token);
-  //     return data;
-  //   }
-  //   else {
-  //     return;
-  //   }
-  // })
-  // .catch((err) => err);
 };
 
 export const getContent = (token) => {
