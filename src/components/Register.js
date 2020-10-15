@@ -20,31 +20,20 @@ function Register (props) {
     setPassword(e.target.value);
   };
 
-  const resetForm = () => {
-    setEmail('');
-    setPassword('');
+  const resetForm = (e) => {
+    e.currentTarget.reset();
   };
 
   const handleSubmit = (e) => {
       e.preventDefault();
+      resetForm(e);
       props.handleSignup(email, password);
-      resetForm();
     };
 
     useEffect( () => {
         setRegistered(props.isRegistered);
         setInfoToolTip(props.isInfoToolTip);
     }, [props.isRegistered, props.isInfoToolTip]);
-
-
-    // useEffect( () => {
-    //   if (isRegistered && isInfoToolTip) {
-    //     setInfoToolTip(false);
-    //     setRegistered(false);
-    //   }
-    // }, []);
-
-
 
     useEffect( () => {
       if (localStorage.getItem('jwt')) {

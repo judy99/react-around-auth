@@ -206,6 +206,7 @@ function App() {
 
   React.useEffect( () => {
     setInfoToolTip(false);
+    setRegistered(false);
   }, []);
 
   React.useEffect( () => {
