@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import Form from './Form.js';
 import Header from './Header.js';
@@ -18,15 +18,22 @@ function Login (props) {
     setPassword(e.target.value);
   };
 
-  const resetForm = () => {
-    setEmail('');
-    setPassword('');
+  // const resetForm = () => {
+  //   setEmail('');
+  //   setPassword('');
+  // };
+
+  const resetForm = (e) => {
+    e.currentTarget.reset();
   };
+
 
   const handleSubmit = (e) => {
       e.preventDefault();
       props.handleLogin(email, password);
-      resetForm();
+      // props.setUsername(email);
+
+      resetForm(e);
     };
 
     useEffect(() => {

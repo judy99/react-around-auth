@@ -10,7 +10,6 @@ import Register from './Register';
 import Login from './Login';
 import * as auth from '../utils/auth.js';
 import { httpStatusCode } from '../utils/utils.js';
-import InfoToolTip from './InfoToolTip.js';
 
 function App() {
   const DELAY_REDIRECT = 3000;
@@ -183,6 +182,8 @@ function App() {
             throw new Error('The user with the specified email not found.');
         }
         else if (data.token) {
+          localStorage.setItem('jwt', data.token);
+          setUsername(username);
           console.log('data.token', data.token);
           setLoggedIn(true);
           return;
@@ -207,6 +208,7 @@ function App() {
   React.useEffect( () => {
     setInfoToolTip(false);
     setRegistered(false);
+    // setUsername(false);
   }, []);
 
   React.useEffect( () => {
@@ -217,6 +219,7 @@ function App() {
   if (jwt) {
     auth.getContent(jwt)
     .then((res) => {
+      console.log('jwt', jwt);
       if (res) {
         let userData = { email: res.data.email, password: res.data.password };
         setUsername(userData.email);
@@ -243,7 +246,7 @@ function App() {
         </Route>
 
         <Route path="/signin">
-          <Login handleLogin={handleLogin} loggedIn={loggedIn} />
+          <Login handleLogin={handleLogin} loggedIn={loggedIn} setUsername={setUsername} />
         </Route>
 
         <ProtectedRoute path="/" loggedIn={loggedIn}
