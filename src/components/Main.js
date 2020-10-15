@@ -12,12 +12,6 @@ import PopupWithImage from './PopupWithImage';
 
 function Main(props) {
 
-  // const [username, setUsername] = React.useState('');
-  //
-  // React.useEffect( () => {
-  //   setUsername(props.username);
-  // }, []);
-
   return (
     <>
     <CurrentUserContext.Provider value={props.currentUser}>

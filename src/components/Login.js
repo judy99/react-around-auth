@@ -31,8 +31,6 @@ function Login (props) {
   const handleSubmit = (e) => {
       e.preventDefault();
       props.handleLogin(email, password);
-      // props.setUsername(email);
-
       resetForm(e);
     };
 

@@ -44,6 +44,10 @@ function App() {
     });
   }, []);
 
+  React.useEffect(() => {
+
+  }, [cards]);
+
   function handleCardLike(card) {
     // Check one more time if this card was already liked
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -136,7 +140,8 @@ function App() {
     setIsLoading(true);
     api.addCard(newCard)
     .then((res) => {
-      setCards([...cards, res]);
+      setCards([res, ...cards]);
+
     })
     .catch((err) => console.log(err))
     .finally(() => {
@@ -191,13 +196,11 @@ function App() {
         else if (data.token) {
           localStorage.setItem('jwt', data.token);
           setUsername(username);
-          console.log('data.token', data.token);
           setLoggedIn(true);
           return;
         }
       }
       catch(e) {
-        console.log('catch in app: ', e);
         return e;
       }
     })
@@ -225,7 +228,6 @@ function App() {
   if (jwt) {
     auth.getContent(jwt)
     .then((res) => {
-      console.log('jwt', jwt);
       if (res) {
         let userData = { email: res.data.email, password: res.data.password };
         setUsername(userData.email);

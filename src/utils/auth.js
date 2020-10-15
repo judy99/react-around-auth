@@ -56,8 +56,8 @@ export const authorize = (email, password) => {
           return err;
         }
     } catch(e) {
-      console.log(e);
-      return e;
+        console.log(e);
+        return e;
     }
   })
 };
