@@ -48,11 +48,13 @@ function App() {
     // Check one more time if this card was already liked
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     // Send a request to the API and getting the updated card data
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+    api.changeLikeCardStatus(card._id, !isLiked)
+    .then((newCard) => {
       // Create a new array based on the existing one and putting a new card into it
       const newCards = cards.map((c) => c._id === card._id ? newCard : c);
       setCards(newCards);
-    });
+    })
+    .catch(err => console.log(err));
 }
 
   function handleCardDelete(card) {
@@ -64,13 +66,17 @@ function App() {
     setIsLoading(true);
     closeAllPopups();
     if (isDeleteConfirmationPopup) {
-      api.removeCard(deleteCard._id).then(() => {
+      api.removeCard(deleteCard._id)
+      .then(() => {
       // Create a new array based on the existing one and removing a card from it
         const newCards = cards.filter((c) => c._id !== deleteCard._id);
       // Update the state
-        setCards(newCards);}).catch((err) => console.log(err)).finally(() => {
-      setDeleteCard(null);
-      setIsLoading(false);
+        setCards(newCards);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setDeleteCard(null);
+        setIsLoading(false);
     });
   }
 }
@@ -115,8 +121,12 @@ function App() {
   function handleUpdateAvatar(avatar) {
     closeAllPopups();
     setIsLoading(true);
-    api.setUserAvatar(avatar).then((res) => {
-      currentUser.avatar = res.avatar;}).catch((err) => console.log(err)).finally(() => {
+    api.setUserAvatar(avatar)
+    .then((res) => {
+      currentUser.avatar = res.avatar;
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
       setIsLoading(false);
     });
   }
@@ -124,8 +134,12 @@ function App() {
   function handleAddPlace(newCard) {
     closeAllPopups();
     setIsLoading(true);
-    api.addCard(newCard).then((res) => {
-      setCards([...cards, res]);}).catch((err) => console.log(err)).finally(() => {
+    api.addCard(newCard)
+    .then((res) => {
+      setCards([...cards, res]);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
       setIsLoading(false);
     });
   }
@@ -201,7 +215,6 @@ function App() {
   React.useEffect( () => {
     setInfoToolTip(false);
     setRegistered(false);
-    // setUsername(false);
   }, []);
 
   React.useEffect( () => {
