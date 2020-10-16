@@ -44,10 +44,6 @@ function App() {
     });
   }, []);
 
-  React.useEffect(() => {
-
-  }, [cards]);
-
   function handleCardLike(card) {
     // Check one more time if this card was already liked
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -152,7 +148,6 @@ function App() {
   function handleSignup(username, password) {
       auth.register(username, password)
       .then((res) => {
-      try {
         if (res instanceof Error) {
           if (res.message === String(httpStatusCode.BAD_REQUEST)) {
             setRegistered(false);
@@ -163,11 +158,6 @@ function App() {
           setRegistered(true);
           return res;
         }
-      }
-      catch(e) {
-        console.log(e.message);
-        return e;
-      }
     })
       .then((res) => {
         if (!(res instanceof Error)) {
@@ -177,7 +167,7 @@ function App() {
           }, DELAY_REDIRECT);
         }
       })
-      .catch((err) => err)
+      .catch((err) => console.log(err))
       .finally(() => {
         setInfoToolTip(true);
       });
@@ -186,7 +176,6 @@ function App() {
   function handleLogin(username, password) {
     auth.authorize(username, password)
     .then((data) => {
-      try {
         if (data instanceof Error) {
           if (data.message === String(httpStatusCode.BAD_REQUEST))
             throw new Error('One or more of the fields were not provided.');
@@ -199,10 +188,6 @@ function App() {
           setLoggedIn(true);
           return;
         }
-      }
-      catch(e) {
-        return e;
-      }
     })
     .then(() => history.push('/'))
     .catch((err) => console.log(err));
@@ -224,18 +209,18 @@ function App() {
   // if the user has a token in localStorage,
   // this function will check that the user has a valid token
   const jwt = localStorage.getItem('jwt');
-
   if (jwt) {
     auth.getContent(jwt)
     .then((res) => {
-      if (res) {
+      if (res instanceof Error) {
+        if (res.message === String(httpStatusCode.UNAUTHORIZED))
+          throw new Error('The provided token is invalid.');
+      }
+      else {
         let userData = { email: res.data.email, password: res.data.password };
         setUsername(userData.email);
         setLoggedIn(true);
         history.push("/");
-      }
-      else {
-        throw new Error('The provided token is invalid.');
       }
     })
     .catch((err) => console.log(err));
