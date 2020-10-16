@@ -11,7 +11,6 @@ export const register = (email, password) => {
     body: JSON.stringify({ email, password })
   })
   .then((response) => {
-    try {
       if (response.status === httpStatusCode.CREATED) {
         return response.json();
       }
@@ -20,9 +19,6 @@ export const register = (email, password) => {
         err.message = String(httpStatusCode.BAD_REQUEST);
         return err;
       }
-    } catch(e){
-        return (e);
-    }
   })
   .then((res) => {
     return res;
@@ -38,7 +34,6 @@ export const authorize = (email, password) => {
     body: JSON.stringify({ email, password })
   })
   .then((response) => {
-    try {
       const err = new Error();
       if (response.status === httpStatusCode.OK) {
         return response.json();
@@ -54,11 +49,10 @@ export const authorize = (email, password) => {
         else {
           return err;
         }
-    } catch(e) {
-        console.log(e);
-        return e;
-    }
   })
+  .then((res) => {
+    return res;
+  });
 };
 
 export const getContent = (token) => {
