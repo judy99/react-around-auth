@@ -18,15 +18,9 @@ function Login (props) {
     setPassword(e.target.value);
   };
 
-  // const resetForm = () => {
-  //   setEmail('');
-  //   setPassword('');
-  // };
-
   const resetForm = (e) => {
     e.currentTarget.reset();
   };
-
 
   const handleSubmit = (e) => {
       e.preventDefault();
@@ -34,11 +28,11 @@ function Login (props) {
       resetForm(e);
     };
 
-    useEffect(() => {
-      if (localStorage.getItem('jwt')) {
-        history.push('/');
-      }
-    }, []);
+  useEffect(() => {
+    if (localStorage.getItem('jwt')) {
+      history.push('/');
+    }
+  }, []);
 
   return (
     <>

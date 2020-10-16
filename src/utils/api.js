@@ -74,7 +74,6 @@ export class Api {
   }
 
   getAppInfo () {
-
     return Promise.all([this.getInitialCards(), this.getUserInfo()]);
   }
 

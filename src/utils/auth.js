@@ -27,7 +27,6 @@ export const register = (email, password) => {
   .then((res) => {
     return res;
   })
-  // .catch((err) => err);
 };
 
 export const authorize = (email, password) => {
@@ -73,10 +72,11 @@ export const getContent = (token) => {
     })
     .then(res => {
       if (res.status === httpStatusCode.UNAUTHORIZED) {
-        throw new Error('Token is not provided or provided in the wrong format.');
+        const err = new Error();
+        err.message = String(httpStatusCode.UNAUTHORIZED);
+        return err;
       }
       return res.json();
     })
-    .then(data => data)
-    .catch(err => err);
+    .then(data => data);
 }
