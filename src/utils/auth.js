@@ -1,6 +1,4 @@
-import { httpStatusCode } from '../utils/utils.js';
-
-const BASE_URL = 'https://register.nomoreparties.co';
+import { httpStatusCode, BASE_URL } from '../utils/utils.js';
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -11,7 +9,7 @@ export const register = (email, password) => {
     body: JSON.stringify({ email, password })
   })
   .then((response) => {
-      if (response.status === httpStatusCode.CREATED) {
+      if (response.status === httpStatusCode.OK) {
         return response.json();
       }
       else {
@@ -65,6 +63,7 @@ export const getContent = (token) => {
       }
     })
     .then(res => {
+      console.log('getContent: data is sent from server: ', res);
       if (res.status === httpStatusCode.UNAUTHORIZED) {
         const err = new Error();
         err.message = String(httpStatusCode.UNAUTHORIZED);
@@ -72,5 +71,8 @@ export const getContent = (token) => {
       }
       return res.json();
     })
-    .then(data => data);
+    .then(data => {
+      // console.log('token is sent from server: ', data);
+      return data;
+    });
 }

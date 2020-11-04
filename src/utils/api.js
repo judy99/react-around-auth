@@ -1,3 +1,5 @@
+import { BASE_URL } from '../utils/utils.js';
+
 export class Api {
   constructor ({
     baseUrl,
@@ -7,7 +9,7 @@ export class Api {
     this.headers = headers;
   }
 
-  // GET https://around.nomoreparties.co/v1/group-2/cards
+  // GET http://www.liakurianova.students.nomoreparties.site/cards
 
   getInitialCards () {
     return fetch(this.baseUrl + '/cards', {
@@ -22,12 +24,13 @@ export class Api {
       });
   }
 
-  // GET https://around.nomoreparties.co/v1/group-2/users/me
+  // GET http://www.liakurianova.students.nomoreparties.site/users/me
   getUserInfo () {
     return fetch(this.baseUrl + '/users/me', {
-      headers: this.headers
+      headers: this.headers,
     })
       .then((res) => {
+        console.log('what getUserInfo gets: ', res);
         if (res.ok) {
           return res.json();
         } else {
@@ -36,7 +39,7 @@ export class Api {
       });
   }
 
-  // POST https://around.nomoreparties.co/v1/group-2/cards
+  // POST http://www.liakurianova.students.nomoreparties.site/cards
   addCard ({
   name,
   link
@@ -58,7 +61,7 @@ export class Api {
       });
   }
 
-  // DELETE https://around.nomoreparties.co/v1/group-2/cards/cardID
+  // DELETE http://www.liakurianova.students.nomoreparties.site/cards/cardID
   removeCard (cardID) {
     return fetch(this.baseUrl + '/cards/' + cardID, {
       headers: this.headers,
@@ -74,11 +77,12 @@ export class Api {
   }
 
   getAppInfo () {
+    console.log('inside getAppInfo');
     return Promise.all([this.getInitialCards(), this.getUserInfo()]);
   }
 
   // add likes
-  // PUT https://around.nomoreparties.co/v1/groupId/cards/likes/cardId
+  // PUT http://www.liakurianova.students.nomoreparties.site/cards/likes/cardId
   addLike (cardId) {
     return fetch(this.baseUrl + '/cards/likes/' + cardId, {
       headers: this.headers,
@@ -93,7 +97,7 @@ export class Api {
       });
   }
 
-  // DELETE https://around.nomoreparties.co/v1/groupId/cards/likes/cardId
+  // DELETE http://www.liakurianova.students.nomoreparties.site/cards/likes/cardId
   removeLike (cardId) {
     return fetch(this.baseUrl + '/cards/likes/' + cardId, {
       headers: this.headers,
@@ -138,7 +142,7 @@ export class Api {
   }
 
   // Editing the Profile
-  // PATCH https://around.nomoreparties.co/v1/groupId/users/me
+  // PATCH http://www.liakurianova.students.nomoreparties.site/users/me
   updateUserInfo ({ name, about }) {
     return fetch(this.baseUrl + '/users/me', {
       headers: this.headers,
@@ -157,7 +161,7 @@ export class Api {
       });
   }
 
-  // PATCH https://around.nomoreparties.co/v1/groupId/users/me/avatar
+  // PATCH http://www.liakurianova.students.nomoreparties.site/users/me/avatar
   setUserAvatar ({ avatar }) {
     return fetch(this.baseUrl + '/users/me/avatar', {
       headers: this.headers,
@@ -177,9 +181,5 @@ export class Api {
 }
 
 export const api = new Api({
-  baseUrl: 'https://around.nomoreparties.co/v1/group-2',
-  headers: {
-    authorization: '93454fed-b8d7-4b37-acbd-87ed08b659ea',
-    'Content-Type': 'application/json'
-  },
+  baseUrl: BASE_URL,
 });

@@ -28,11 +28,12 @@ function Login (props) {
       resetForm(e);
     };
 
-  useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      history.push('/');
-    }
-  }, []);
+  // useEffect(() => {
+  //     if (localStorage.getItem('jwt')) {
+  //       console.log('localStorage.getItem(jwt)', localStorage.getItem('jwt'));
+  //       history.push('/');
+  //     }
+  // }, []);
 
   return (
     <>

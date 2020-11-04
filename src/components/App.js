@@ -28,21 +28,11 @@ function App() {
   const [username, setUsername] = React.useState('');
   const [isRegistered, setRegistered] = React.useState(false);
   const [isInfoToolTip, setInfoToolTip] = React.useState(false);
+  const [token, setToken] = React.useState(localStorage.getItem('jwt'));
+
 
   const history = useHistory();
 
-  React.useEffect(() => {
-    setIsLoading(true);
-    api.getAppInfo().then((res) => {
-      setCurrentUser(res[1]);
-      setCards(res[0]);
-      setIsLoading(false);
-    })
-    .catch((err) => console.log(err))
-    .finally(() => {
-      setIsLoading(false);
-    });
-  }, []);
 
   function handleCardLike(card) {
     // Check one more time if this card was already liked
@@ -183,6 +173,7 @@ function App() {
             throw new Error('The user with the specified email not found.');
         }
         else if (data.token) {
+          console.log('data.token', data.token);
           localStorage.setItem('jwt', data.token);
           setUsername(username);
           setLoggedIn(true);
@@ -200,15 +191,15 @@ function App() {
     history.push('/signin');
   }
 
+
   React.useEffect( () => {
     setInfoToolTip(false);
     setRegistered(false);
-  }, []);
 
-  React.useEffect( () => {
   // if the user has a token in localStorage,
   // this function will check that the user has a valid token
   const jwt = localStorage.getItem('jwt');
+  console.log('local jwt', jwt);
   if (jwt) {
     auth.getContent(jwt)
     .then((res) => {
@@ -217,15 +208,73 @@ function App() {
           throw new Error('The provided token is invalid.');
       }
       else {
-        let userData = { email: res.data.email, password: res.data.password };
-        setUsername(userData.email);
-        setLoggedIn(true);
-        history.push("/");
+        // console.log('res', res);
+        // let userData = { email: res.data.email, password: res.data.password };
+        // console.log('userData === ', userData);
+        // setUsername(res.email);
+        // setLoggedIn(true);
+        // console.log('logged IN-1 === ', loggedIn);
+        // console.log('username === ', username);
+        return res;
+
       }
     })
+    .then((res) => {
+      console.log('res === ', res);
+
+      setUsername(res.email);
+      setLoggedIn(true);
+      console.log('logged IN-1 === ', loggedIn);
+      console.log('username === ', username);
+    })
+    .then(() => history.push("/"))
+    .then(() => {
+      console.log('logged IN-1111 === ', loggedIn);
+
+      if (loggedIn) {
+        api.getAppInfo()
+        .then((res) => {
+          console.log('res1 CurrentUser load after login:', res[1]);
+          console.log('res0 Cards load after login:', res[0]);
+          setCurrentUser(res[1]);
+          setCards(res[0]);
+          setIsLoading(false);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => {
+          setIsLoading(false);
+        });
+      }}
+    )
     .catch((err) => console.log(err));
   }
 }, []);
+
+// React.useEffect( () => {
+//   setInfoToolTip(false);
+//   setRegistered(false);
+//   console.log('logged IN-2 === ', loggedIn);
+//
+// }, []);
+
+// React.useEffect(() => {
+//   // setIsLoading(true);
+//   console.log('logged IN-3 === ', loggedIn);
+//   if (loggedIn) {
+//     api.getAppInfo()
+//     .then((res) => {
+//       console.log('res1 CurrentUser load after login:', res[1]);
+//       console.log('res0 Cards load after login:', res[0]);
+//       setCurrentUser(res[1]);
+//       setCards(res[0]);
+//       setIsLoading(false);
+//     })
+//     .catch((err) => console.log(err))
+//     .finally(() => {
+//       setIsLoading(false);
+//     });
+//   }
+// }, [loggedIn]);
 
       return (
     <div className="page">
@@ -239,11 +288,13 @@ function App() {
         </Route>
 
         <Route path="/signin">
-          <Login handleLogin={handleLogin} loggedIn={loggedIn} setUsername={setUsername} />
+          <Login handleLogin={handleLogin}  setUsername={setUsername} />
         </Route>
 
-        <ProtectedRoute path="/" loggedIn={loggedIn}
+        <ProtectedRoute path="/"
           component={Main}
+          loggedIn={loggedIn}
+          // loggedIn='true'
           onEditProfile={handleEditProfileClick}
           onEditAvatar={handleEditAvatarClick}
           onAddPlace={handleAddPlaceClick}

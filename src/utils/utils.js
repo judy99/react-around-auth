@@ -13,3 +13,6 @@ export const httpStatusCode = {
   NOT_FOUND: 404,
   SERVER_ERROR: 500,
 };
+
+// export const BASE_URL = 'http://www.liakurianova.students.nomoreparties.site';
+export const BASE_URL = 'http://localhost:3000';

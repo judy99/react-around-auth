@@ -35,11 +35,11 @@ function Register (props) {
         setInfoToolTip(props.isInfoToolTip);
     }, [props.isRegistered, props.isInfoToolTip]);
 
-    useEffect( () => {
-      if (localStorage.getItem('jwt')) {
-        history.push('/');
-      }
-    }, []);
+    // useEffect( () => {
+    //   if (localStorage.getItem('jwt')) {
+    //     history.push('/');
+    //   }
+    // }, []);
 
   return (
     <>
