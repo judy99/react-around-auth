@@ -127,6 +127,8 @@ function App() {
     api.addCard(newCard)
     .then((res) => {
       setCards([res, ...cards]);
+      console.log('cards', cards);
+      // setCards([cards.unshift(res)]);
     })
     .catch((err) => console.log(err))
     .finally(() => {

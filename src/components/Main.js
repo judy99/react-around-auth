@@ -36,7 +36,7 @@ function Main(props) {
         <button type="button" className="btn profile__add-btn" onClick={props.onAddPlace}></button>
       </section>
       <ul className="gallery">
-      { props.cards.map(item => {
+      { props.cards.reverse().map(item => {
         return <Card card={item} key={item._id} onCardClick={props.onSelectedCard} onCardLike={props.onCardLike} onCardDelete={props.onCardDelete} /> }
       )
     }
