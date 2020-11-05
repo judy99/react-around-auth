@@ -99,8 +99,7 @@ function App() {
     setIsLoading(true);
     closeAllPopups();
     api.updateUserInfo(user).then((res) => {
-      currentUser.name = res.name;
-      currentUser.about = res.about;
+      setCurrentUser({...currentUser, name: res.data.name, about: res.data.about});
     }).catch((err) => console.log(err)).finally(() => {
       setIsLoading(false);
     });
@@ -111,8 +110,10 @@ function App() {
     setIsLoading(true);
     api.setUserAvatar(avatar)
     .then((res) => {
+      console.log('return update avatar', res.data.avatar);
       // currentUser.avatar = res.avatar;
-      setCurrentUser({avatar: res.avatar});
+      setCurrentUser({...currentUser, avatar: res.data.avatar});
+      console.log('currentUser ===== ', currentUser);
     })
     .catch((err) => console.log(err))
     .finally(() => {
@@ -126,7 +127,6 @@ function App() {
     api.addCard(newCard)
     .then((res) => {
       setCards([res, ...cards]);
-
     })
     .catch((err) => console.log(err))
     .finally(() => {
@@ -191,22 +191,6 @@ function App() {
     history.push('/signin');
   }
 
-  // React.useEffect(() => {
-  //       api.getAppInfo()
-  //       .then((res) => {
-  //         console.log('res1 CurrentUser load after login:', res[1]);
-  //         console.log('res0 Cards load after login:', res[0]);
-  //         setCurrentUser(res[1]);
-  //         setCards(res[0]);
-  //         setIsLoading(false);
-  //       })
-  //       .then(() => history.push("/"))
-  //       .catch((err) => console.log(err))
-  //       .finally(() => {
-  //         setIsLoading(false);
-  //       });
-  // }, []);
-
   React.useEffect(() => {
     setInfoToolTip(false);
     setRegistered(false);
@@ -243,9 +227,8 @@ function App() {
 }, []);
 
 React.useEffect(() => {
-
-});
-
+  setCurrentUser(currentUser);
+}, [currentUser]);
 
       return (
     <div className="page">
