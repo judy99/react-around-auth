@@ -72,7 +72,6 @@ export const getContent = (token) => {
       return res.json();
     })
     .then(data => {
-      // console.log('token is sent from server: ', data);
       return data;
     });
 }

@@ -64,6 +64,7 @@ export class Api {
 
   // DELETE http://www.liakurianova.students.nomoreparties.site/cards/cardID
   removeCard (cardID) {
+    // console.log('endpoint: ', this.baseUrl + '/cards/' + cardID);
     return fetch(this.baseUrl + '/cards/' + cardID, {
       headers: this.headers,
       method: 'DELETE'
@@ -72,7 +73,7 @@ export class Api {
         if (res.ok) {
           return res.json();
         } else {
-          return Promise.reject(`Error: ${res.status}`);
+          return Promise.reject(`Error: ${res.status} ${res.message}`);
         }
       });
   }

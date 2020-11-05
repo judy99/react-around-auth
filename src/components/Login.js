@@ -29,13 +29,6 @@ function Login (props) {
       resetForm(e);
     };
 
-  // useEffect(() => {
-  //     if (jwt) {
-  //       // console.log('props.loggedIn', props.loggedIn);
-  //       history.push('/');
-  //     }
-  // }, []);
-
   return (
     <>
     <Header>

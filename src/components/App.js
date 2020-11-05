@@ -55,9 +55,11 @@ function App() {
     closeAllPopups();
     if (isDeleteConfirmationPopup) {
       api.removeCard(deleteCard._id)
-      .then(() => {
+      .then((card) => {
+        console.log('return removed card:', card);
       // Create a new array based on the existing one and removing a card from it
         const newCards = cards.filter((c) => c._id !== deleteCard._id);
+        console.log('newCards', newCards);
       // Update the state
         setCards(newCards);
       })
@@ -111,7 +113,6 @@ function App() {
     api.setUserAvatar(avatar)
     .then((res) => {
       console.log('return update avatar', res.data.avatar);
-      // currentUser.avatar = res.avatar;
       setCurrentUser({...currentUser, avatar: res.data.avatar});
       console.log('currentUser ===== ', currentUser);
     })
@@ -128,7 +129,6 @@ function App() {
     .then((res) => {
       setCards([res, ...cards]);
       console.log('cards', cards);
-      // setCards([cards.unshift(res)]);
     })
     .catch((err) => console.log(err))
     .finally(() => {
@@ -174,9 +174,7 @@ function App() {
             throw new Error('The user with the specified email not found.');
         }
         else if (data.token) {
-          // console.log('data.token', data.token);
           localStorage.setItem('jwt', data.token);
-          // setToken(data.token);
           setUsername(username);
           setLoggedIn(true);
           return;
@@ -203,11 +201,14 @@ function App() {
   if (jwt) {
     auth.getContent(jwt)
     .then((res) => {
+      console.log('res after check token ', res);
+
       if (res instanceof Error) {
         if (res.message === String(httpStatusCode.UNAUTHORIZED))
           throw new Error('The provided token is invalid.');
       }
       setLoggedIn(true);
+      setUsername(res.email);
       console.log('Token is valid');
       api.getAppInfo()
       .then((res) => {
@@ -217,7 +218,6 @@ function App() {
         setCards(res[0]);
         setIsLoading(false);
       })
-      // .then(() => history.push("/"))
       .catch((err) => console.log(err));
       })
     .then(() => history.push("/"))
