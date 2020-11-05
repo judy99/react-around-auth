@@ -9,9 +9,7 @@ import AddPlacePopup from './AddPlacePopup';
 import DeleteConfirmationPopup from './DeleteConfirmationPopup';
 import PopupWithImage from './PopupWithImage';
 
-
 function Main(props) {
-
   return (
     <>
     <CurrentUserContext.Provider value={props.currentUser}>

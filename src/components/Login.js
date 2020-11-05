@@ -8,7 +8,8 @@ function Login (props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const history = useHistory();
+  // const history = useHistory();
+  // const jwt = localStorage.getItem('jwt');
 
   const handleOnChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -29,8 +30,8 @@ function Login (props) {
     };
 
   // useEffect(() => {
-  //     if (localStorage.getItem('jwt')) {
-  //       console.log('localStorage.getItem(jwt)', localStorage.getItem('jwt'));
+  //     if (jwt) {
+  //       // console.log('props.loggedIn', props.loggedIn);
   //       history.push('/');
   //     }
   // }, []);

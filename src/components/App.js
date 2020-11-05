@@ -5,7 +5,7 @@ import Footer from './Footer';
 import Main from './Main';
 import {api} from '../utils/api.js';
 import Loader from './Loader';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import * as auth from '../utils/auth.js';
@@ -30,9 +30,7 @@ function App() {
   const [isInfoToolTip, setInfoToolTip] = React.useState(false);
   const [token, setToken] = React.useState(localStorage.getItem('jwt'));
 
-
   const history = useHistory();
-
 
   function handleCardLike(card) {
     // Check one more time if this card was already liked
@@ -113,7 +111,8 @@ function App() {
     setIsLoading(true);
     api.setUserAvatar(avatar)
     .then((res) => {
-      currentUser.avatar = res.avatar;
+      // currentUser.avatar = res.avatar;
+      setCurrentUser({avatar: res.avatar});
     })
     .catch((err) => console.log(err))
     .finally(() => {
@@ -173,8 +172,9 @@ function App() {
             throw new Error('The user with the specified email not found.');
         }
         else if (data.token) {
-          console.log('data.token', data.token);
+          // console.log('data.token', data.token);
           localStorage.setItem('jwt', data.token);
+          // setToken(data.token);
           setUsername(username);
           setLoggedIn(true);
           return;
@@ -191,11 +191,25 @@ function App() {
     history.push('/signin');
   }
 
+  // React.useEffect(() => {
+  //       api.getAppInfo()
+  //       .then((res) => {
+  //         console.log('res1 CurrentUser load after login:', res[1]);
+  //         console.log('res0 Cards load after login:', res[0]);
+  //         setCurrentUser(res[1]);
+  //         setCards(res[0]);
+  //         setIsLoading(false);
+  //       })
+  //       .then(() => history.push("/"))
+  //       .catch((err) => console.log(err))
+  //       .finally(() => {
+  //         setIsLoading(false);
+  //       });
+  // }, []);
 
-  React.useEffect( () => {
+  React.useEffect(() => {
     setInfoToolTip(false);
     setRegistered(false);
-
   // if the user has a token in localStorage,
   // this function will check that the user has a valid token
   const jwt = localStorage.getItem('jwt');
@@ -207,74 +221,31 @@ function App() {
         if (res.message === String(httpStatusCode.UNAUTHORIZED))
           throw new Error('The provided token is invalid.');
       }
-      else {
-        // console.log('res', res);
-        // let userData = { email: res.data.email, password: res.data.password };
-        // console.log('userData === ', userData);
-        // setUsername(res.email);
-        // setLoggedIn(true);
-        // console.log('logged IN-1 === ', loggedIn);
-        // console.log('username === ', username);
-        return res;
-
-      }
-    })
-    .then((res) => {
-      console.log('res === ', res);
-
-      setUsername(res.email);
       setLoggedIn(true);
-      console.log('logged IN-1 === ', loggedIn);
-      console.log('username === ', username);
-    })
+      console.log('Token is valid');
+      api.getAppInfo()
+      .then((res) => {
+        console.log('res1 CurrentUser load after login:', res[1]);
+        console.log('res0 Cards load after login:', res[0]);
+        setCurrentUser(res[1]);
+        setCards(res[0]);
+        setIsLoading(false);
+      })
+      // .then(() => history.push("/"))
+      .catch((err) => console.log(err));
+      })
     .then(() => history.push("/"))
-    .then(() => {
-      console.log('logged IN-1111 === ', loggedIn);
-
-      if (loggedIn) {
-        api.getAppInfo()
-        .then((res) => {
-          console.log('res1 CurrentUser load after login:', res[1]);
-          console.log('res0 Cards load after login:', res[0]);
-          setCurrentUser(res[1]);
-          setCards(res[0]);
-          setIsLoading(false);
-        })
-        .catch((err) => console.log(err))
-        .finally(() => {
-          setIsLoading(false);
-        });
-      }}
-    )
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err))
+    .finally(() => {
+      setIsLoading(false);
+    });
   }
 }, []);
 
-// React.useEffect( () => {
-//   setInfoToolTip(false);
-//   setRegistered(false);
-//   console.log('logged IN-2 === ', loggedIn);
-//
-// }, []);
+React.useEffect(() => {
 
-// React.useEffect(() => {
-//   // setIsLoading(true);
-//   console.log('logged IN-3 === ', loggedIn);
-//   if (loggedIn) {
-//     api.getAppInfo()
-//     .then((res) => {
-//       console.log('res1 CurrentUser load after login:', res[1]);
-//       console.log('res0 Cards load after login:', res[0]);
-//       setCurrentUser(res[1]);
-//       setCards(res[0]);
-//       setIsLoading(false);
-//     })
-//     .catch((err) => console.log(err))
-//     .finally(() => {
-//       setIsLoading(false);
-//     });
-//   }
-// }, [loggedIn]);
+});
+
 
       return (
     <div className="page">
@@ -294,7 +265,6 @@ function App() {
         <ProtectedRoute path="/"
           component={Main}
           loggedIn={loggedIn}
-          // loggedIn='true'
           onEditProfile={handleEditProfileClick}
           onEditAvatar={handleEditAvatarClick}
           onAddPlace={handleAddPlaceClick}
@@ -321,6 +291,10 @@ function App() {
           handleAddPlace={handleAddPlace}
           handleConfirmDelete={handleConfirmDelete}
        />
+       <Route exact path="/">
+            { loggedIn ? <Redirect to="/" /> : <Redirect to="/login" />}
+      </Route>
+
       </Switch>
       <Footer />
     </div>

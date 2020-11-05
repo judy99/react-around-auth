@@ -16,6 +16,7 @@ export class Api {
       headers: this.headers
     })
       .then((res) => {
+        console.log('getInitialCards ', res);
         if (res.ok) {
           return res.json();
         } else {
@@ -162,19 +163,17 @@ export class Api {
   }
 
   // PATCH http://www.liakurianova.students.nomoreparties.site/users/me/avatar
-  setUserAvatar ({ avatar }) {
+  setUserAvatar (avatar) {
     return fetch(this.baseUrl + '/users/me/avatar', {
       headers: this.headers,
       method: 'PATCH',
-      body: JSON.stringify({
-        avatar
-      })
+      body: JSON.stringify(avatar),
     })
       .then((res) => {
         if (res.ok) {
           return res.json();
         } else {
-          return Promise.reject(`Error: ${res.status}`);
+          return Promise.reject(`Error: ${res.status} ${res.message}`);
         }
       });
   }
@@ -182,4 +181,8 @@ export class Api {
 
 export const api = new Api({
   baseUrl: BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+  },
 });
