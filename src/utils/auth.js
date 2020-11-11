@@ -32,6 +32,7 @@ export const authorize = (email, password) => {
     body: JSON.stringify({ email, password })
   })
   .then((response) => {
+    console.log('response auth:', response);
       const err = new Error();
       if (response.status === httpStatusCode.OK) {
         return response.json();
@@ -72,6 +73,7 @@ export const getContent = (token) => {
       return res.json();
     })
     .then(data => {
+      console.log('what i get after check token: ', data);
       return data;
     });
 }

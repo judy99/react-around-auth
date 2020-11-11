@@ -37,7 +37,7 @@ function Main(props) {
       </section>
       <ul className="gallery">
       { props.cards.map(item => {
-        return <Card card={item} key={item._id} onCardClick={props.onSelectedCard} onCardLike={props.onCardLike} onCardDelete={props.onCardDelete} /> }
+        return <Card card={item} key={item._id} cardLikes={item.likes} onCardClick={props.onSelectedCard} onCardLike={props.onCardLike} onCardDelete={props.onCardDelete} /> }
       )
     }
       </ul>

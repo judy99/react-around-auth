@@ -1,5 +1,3 @@
-import { BASE_URL } from '../utils/utils.js';
-
 export class Api {
   constructor ({
     baseUrl,
@@ -80,6 +78,7 @@ export class Api {
 
   getAppInfo () {
     console.log('inside getAppInfo');
+    console.log('token = ', this.headers.Authorization);
     return Promise.all([this.getInitialCards(), this.getUserInfo()]);
   }
 
@@ -115,31 +114,33 @@ export class Api {
   }
 
   changeLikeCardStatus (cardId, cardStatus) {
-    if (cardStatus) {
-      return fetch(this.baseUrl + '/cards/likes/' + cardId, {
-        headers: this.headers,
-        method: 'PUT'
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          } else {
-            return Promise.reject(`Error: ${res.status}`);
-          }
-        });
+    if (!cardStatus) {
+      // return fetch(this.baseUrl + '/cards/likes/' + cardId, {
+      //   headers: this.headers,
+      //   method: 'PUT'
+      // })
+      //   .then((res) => {
+      //     if (res.ok) {
+      //       return res.json();
+      //     } else {
+      //       return Promise.reject(`Error: ${res.status}`);
+      //     }
+      //   });
+      this.addLike(cardId);
     }
     else {
-      return fetch(this.baseUrl + '/cards/likes/' + cardId, {
-        headers: this.headers,
-        method: 'DELETE'
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          } else {
-            return Promise.reject(`Error: ${res.status}`);
-          }
-        });
+      this.removeLike(cardId)
+    //   return fetch(this.baseUrl + '/cards/likes/' + cardId, {
+    //     headers: this.headers,
+    //     method: 'DELETE'
+    //   })
+    //     .then((res) => {
+    //       if (res.ok) {
+    //         return res.json();
+    //       } else {
+    //         return Promise.reject(`Error: ${res.status}`);
+    //       }
+    //     });
     }
   }
 
@@ -180,10 +181,10 @@ export class Api {
   }
 }
 
-export const api = new Api({
-  baseUrl: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-  },
-});
+// export const api = new Api({
+//   baseUrl: BASE_URL,
+//   headers: {
+//     'Content-Type': 'application/json',
+//     Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+//   },
+// });
