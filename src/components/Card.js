@@ -6,13 +6,8 @@ function Card(props) {
   const [liked, setLiked] = React.useState(props.card.likes.some(i => i === currentUser._id));
   const [counterLikes, setCounterLikes] = React.useState(props.cardLikes.length);
 
-  // const [likes, setLikes] = React.useState(props.card.likes.length);
-
   // Checking if you are the owner of the current card
   const isOwn = props.card.owner === currentUser._id;
-
-  // Check if the card was liked by the current user
-  // let isLiked = props.card.likes.some(i => i._id === currentUser._id);
 
   // Creating a variable which you'll then set in `className` for the delete button
   const cardDeleteButtonClassName = (
@@ -31,11 +26,6 @@ function Card(props) {
     e.stopPropagation();
     setLiked(!liked);
     liked ? setCounterLikes(counterLikes - 1) : setCounterLikes(counterLikes + 1);
-    // if (liked) {
-    //   setCounterLikes(counterLikes - 1);
-    // } else {
-    //   setCounterLikes(counterLikes + 1);
-    // }
     props.onCardLike(props.card);
   }
 

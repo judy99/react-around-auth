@@ -10,8 +10,6 @@ function Register (props) {
   const [isRegistered, setRegistered] = useState(false);
   const [isInfoToolTip, setInfoToolTip] = useState(false);
 
-  const history = useHistory();
-
   const handleOnChangeEmail = (e) => {
     setEmail(e.target.value);
   };
@@ -34,12 +32,6 @@ function Register (props) {
         setRegistered(props.isRegistered);
         setInfoToolTip(props.isInfoToolTip);
     }, [props.isRegistered, props.isInfoToolTip]);
-
-    // useEffect( () => {
-    //   if (localStorage.getItem('jwt')) {
-    //     history.push('/');
-    //   }
-    // }, []);
 
   return (
     <>

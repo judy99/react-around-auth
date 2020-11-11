@@ -19,6 +19,7 @@ function Main(props) {
       <li><NavLink to="/signin" className="menu__link" onClick={props.onSignOut}>Log out</NavLink></li>
     </Header>
     <main className="main">
+
       <section className="profile">
         <div className="profile__person">
           <div className="profile__avatar-wrapper">

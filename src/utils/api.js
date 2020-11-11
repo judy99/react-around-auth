@@ -8,13 +8,11 @@ export class Api {
   }
 
   // GET http://www.liakurianova.students.nomoreparties.site/cards
-
   getInitialCards () {
     return fetch(this.baseUrl + '/cards', {
       headers: this.headers
     })
       .then((res) => {
-        console.log('getInitialCards ', res);
         if (res.ok) {
           return res.json();
         } else {
@@ -29,7 +27,6 @@ export class Api {
       headers: this.headers,
     })
       .then((res) => {
-        console.log('what getUserInfo gets: ', res);
         if (res.ok) {
           return res.json();
         } else {
@@ -62,7 +59,6 @@ export class Api {
 
   // DELETE http://www.liakurianova.students.nomoreparties.site/cards/cardID
   removeCard (cardID) {
-    // console.log('endpoint: ', this.baseUrl + '/cards/' + cardID);
     return fetch(this.baseUrl + '/cards/' + cardID, {
       headers: this.headers,
       method: 'DELETE'
@@ -77,8 +73,6 @@ export class Api {
   }
 
   getAppInfo () {
-    console.log('inside getAppInfo');
-    console.log('token = ', this.headers.Authorization);
     return Promise.all([this.getInitialCards(), this.getUserInfo()]);
   }
 
@@ -115,32 +109,10 @@ export class Api {
 
   changeLikeCardStatus (cardId, cardStatus) {
     if (!cardStatus) {
-      // return fetch(this.baseUrl + '/cards/likes/' + cardId, {
-      //   headers: this.headers,
-      //   method: 'PUT'
-      // })
-      //   .then((res) => {
-      //     if (res.ok) {
-      //       return res.json();
-      //     } else {
-      //       return Promise.reject(`Error: ${res.status}`);
-      //     }
-      //   });
       this.addLike(cardId);
     }
     else {
       this.removeLike(cardId)
-    //   return fetch(this.baseUrl + '/cards/likes/' + cardId, {
-    //     headers: this.headers,
-    //     method: 'DELETE'
-    //   })
-    //     .then((res) => {
-    //       if (res.ok) {
-    //         return res.json();
-    //       } else {
-    //         return Promise.reject(`Error: ${res.status}`);
-    //       }
-    //     });
     }
   }
 
@@ -180,11 +152,3 @@ export class Api {
       });
   }
 }
-
-// export const api = new Api({
-//   baseUrl: BASE_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//     Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-//   },
-// });
